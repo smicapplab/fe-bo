@@ -1,6 +1,6 @@
 <script>
 	import { Button } from '$lib/components/ui/button/index.js';
-	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
+	import DataTable from './(components)/data-table.svelte';
 	import FilterPopover from '$lib/components/ui/filter-popover/filter-popover.svelte';
 	import { Icons } from '$lib/components/ui/icons';
 	import Input from '$lib/components/ui/input/input.svelte';
