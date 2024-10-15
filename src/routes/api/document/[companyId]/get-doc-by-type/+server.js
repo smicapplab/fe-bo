@@ -4,7 +4,6 @@ import { json } from '@sveltejs/kit';
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request, locals, params }) {
 	const { companyId } = params;
-
 	const { supabase, user } = locals;
 	const { type } = await request.json();
 
