@@ -9,6 +9,7 @@
 	import Footer from '$lib/components/ui/layout/footer.svelte';
 	import { page } from '$app/stores';
 	import { getInitials } from '$lib/utils';
+	import Divider from '$lib/components/ui/divider/divider.svelte';
 
 	$: ({ supabase, profile } = $page.data);
 	$: pathName = $page.url.pathname.trim();
@@ -16,6 +17,19 @@
 	const signOut = async () => {
 		await supabase.auth.signOut();
 		window.location.replace('/');
+	};
+
+	const navigation = [
+		{ href: '/dashboard', pathIndex: '/dashboard', label: 'Dashboard' },
+		{ href: '/issuer/list', pathIndex: '/issuer', label: 'Issuers' },
+		{ href: '/notes', pathIndex: '/notes', label: 'Notes' },
+		{ href: '/admin/users/list', pathIndex: '/admin', label: 'Administration' }
+	];
+
+	let isSheetOpen = false;
+
+	const closeSheet = () => {
+		isSheetOpen = false;
 	};
 </script>
 
@@ -30,45 +44,21 @@
 				<a href="##" class="hidden items-center gap-2 md:flex">
 					<KLogo />
 				</a>
-				<a
-					href="/dashboard"
-					class="whitespace-nowrap transition-colors hover:text-foreground {pathName ===
-					'/dashboard'
-						? 'font-bold text-foreground'
-						: ''}"
-				>
-					Dashboard
-				</a>
-				<a
-					href="/issuer/list"
-					class="whitespace-nowrap transition-colors hover:text-foreground {pathName.indexOf(
-						'/issuer'
-					) !== -1
-						? 'font-bold text-foreground'
-						: ''}"
-				>
-					Issuers
-				</a>
-				<a
-					href="/notes"
-					class="whitespace-nowrap transition-colors hover:text-foreground {pathName.indexOf(
-						'/notes'
-					) !== -1
-						? 'font-bold text-foreground'
-						: ''}"
-				>
-					Notes
-				</a>
-				<a
-					href="/admin/users/list"
-					class="whitespace-nowrap transition-colors hover:text-foreground {pathName.indexOf(
-						'/admin'
-					) !== -1
-						? 'font-bold text-foreground'
-						: ''}">Administration</a
-				>
+
+				{#each navigation as navItem}
+					<a
+						href={navItem.href}
+						class="whitespace-nowrap transition-colors hover:text-foreground {pathName.indexOf(
+							navItem.pathIndex
+						) !== -1
+							? 'font-bold text-foreground'
+							: ''}"
+					>
+						{navItem.label}
+					</a>
+				{/each}
 			</nav>
-			<Sheet.Root>
+			<Sheet.Root bind:open={isSheetOpen}>
 				<Sheet.Trigger asChild let:builder>
 					<Button variant="outline" size="icon" class="shrink-0 md:hidden" builders={[builder]}>
 						<Menu class="h-5 w-5" />
@@ -79,16 +69,16 @@
 					</div>
 				</Sheet.Trigger>
 				<Sheet.Content side="left">
-					<nav class="grid gap-6 text-lg font-medium">
-						<a href="##" class="flex items-center gap-2 text-lg font-semibold">
+					<nav class="grid gap-6 text-base font-medium">
+						<a href="##" class="flex items-center gap-2 font-semibold">
 							<img src="{assets}/images/koredor.png" alt="Koredor Logo" class="h-10 w-auto" />
 						</a>
-						{#if profile.status === 'ACTIVE'}
-							<a href="##" class="hover:text-foreground"> Dashboard </a>
-							<a href="##" class="text-muted-foreground hover:text-foreground"> Portfolio </a>
-							<a href="##" class="text-muted-foreground hover:text-foreground"> Note Auction </a>
-							<a href="##" class="text-muted-foreground hover:text-foreground"> Issuer Request </a>
-						{/if}
+						<Divider />
+						{#each navigation as navItem}
+							<a href={navItem.href} class="hover:text-foreground" on:click={closeSheet}>
+								{navItem.label}
+							</a>
+						{/each}
 					</nav>
 				</Sheet.Content>
 			</Sheet.Root>

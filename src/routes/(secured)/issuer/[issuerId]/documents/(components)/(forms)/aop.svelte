@@ -1,4 +1,6 @@
 <script>
+	// @ts-nocheck
+	
 	import { Button } from '$lib/components/ui/button';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
