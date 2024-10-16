@@ -50,17 +50,20 @@
 				const { result: formResult } = result;
 				if (formResult.type === 'success') {
 					// @ts-ignore
-					$formData.set(formResult.data);
+					console.log("--------->", formResult.data);
+					formData.set(formResult.data);
 				}
 			},
-			taintedMessage: null
+			applyAction: false, // Add this line to prevent page reload
+			resetForm: false,
+			invalidateAll: true // Optional: prevent form reset after submission
 		}
 	);
 
-	const { form: formData, enhance, validate } = form;
-	// $: if ($errors && Object.keys($errors).length > 0) {
-	// 	console.log('New errors:', $errors);
-	// }
+	const { form: formData, enhance, validate, errors } = form;
+	$: if ($errors && Object.keys($errors).length > 0) {
+		console.log('New errors:', $errors);
+	}
 
 	// Get today's date
 	const currentDate = today(getLocalTimeZone());
@@ -89,7 +92,7 @@
 				toast.success(`File ${selectedFile.name} deleted successfully!`);
 			}
 		} catch (error) {
-			console.error(error);
+			console.error('deleteFile::: ', error);
 		} finally {
 			isImgLoading = false;
 			closeModal();
@@ -131,7 +134,7 @@
 				reader.readAsDataURL(file);
 			}
 		} catch (error) {
-			console.error(error);
+			console.error('handleFileChange::: ', error);
 		}
 	};
 
@@ -148,13 +151,10 @@
 
 			if (response.ok) {
 				const data = await response.json();
-				formData.set({
-					...data,
-					type: 'DTI'
-				});
+				formData.set(data);
 			}
 		} catch (error) {
-			console.error(error);
+			console.error('onMount:::', error);
 		} finally {
 			isLoading = false;
 		}
@@ -246,11 +246,9 @@
 								</Popover.Trigger>
 								<Popover.Content class="w-auto p-0" side="top">
 									<AdvancedCalendar
-										value={$formData.registrationDate
-											? parseDate($formData.registrationDate)
-											: null}
-										minValue={currentDate.subtract({ years: 100 })}
-										maxValue={currentDate}
+										value={$formData.registrationDate ? parseDate($formData.registrationDate) : null}
+										minValue={currentDate.subtract({ years: 1 })}
+										maxValue={currentDate.add({ years: 10 })}
 										onValueChange={(v) => {
 											$formData.registrationDate = v ? v.toString() : '';
 										}}

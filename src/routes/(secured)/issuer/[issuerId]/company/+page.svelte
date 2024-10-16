@@ -58,7 +58,9 @@
 				}
 			}
 		},
-		taintedMessage: null
+		applyAction: false,  // Add this line to prevent page reload
+		resetForm: false,
+        invalidateAll: false    // Optional: prevent form reset after submission
 	});
 
 	const { form: formData, enhance, errors } = form;
@@ -160,7 +162,6 @@
 				<Form.Label>Company Name</Form.Label>
 				<Input bind:value={$formData.companyName} />
 			</Form.Control>
-			<Form.Description>Should match registered SEC or DTI Company Name</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 

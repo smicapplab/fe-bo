@@ -26,16 +26,14 @@ export async function load({ params }) {
  * @returns 
  */
 const saveDocument = async ({ form }) => {
-    const supabase = getSupabaseClient();
-    form.data.registrationDate = form.data.registrationDate
-        ? new Date(form.data.registrationDate).toISOString()
-        : null;
+    const supabase = getSupabaseClient();        
     let documentData = keysToSnakeCase({ ...form.data });
 
     const { error } = await supabase
         .from('documents')
         .update(documentData) // newData is an object with the fields you want to update
         .eq('id', documentData.id)
+        .select()
         .single();
 
     if (error) {
@@ -75,6 +73,8 @@ export const actions = {
         if (!form.valid) {
             return fail(400, { form });
         }
+
+        console.log("===>", form.data)
 
         return await saveDocument({ form, locals });
     },

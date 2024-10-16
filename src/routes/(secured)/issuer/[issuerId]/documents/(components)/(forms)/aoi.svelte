@@ -51,10 +51,12 @@
 				const { result: formResult } = result;
 				if (formResult.type === 'success') {
 					// @ts-ignore
-					$formData.set(formResult.data);
+					formData.set(formResult.data);
 				}
 			},
-			taintedMessage: null
+			applyAction: false, // Add this line to prevent page reload
+			resetForm: false,
+			invalidateAll: false // Optional: prevent form reset after submission
 		}
 	);
 
@@ -87,7 +89,7 @@
 			if (response.ok) {
 				const data = await response.json();
 				toast.success(`File ${selectedFile.name} deleted successfully!`);
-				$formData.set(data);
+				formData.set(data);
 			}
 		} catch (error) {
 			console.error(error);

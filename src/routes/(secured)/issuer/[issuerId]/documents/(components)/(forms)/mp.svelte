@@ -49,11 +49,14 @@
 				isLoading = false;
 				const { result: formResult } = result;
 				if (formResult.type === 'success') {
+					console.log("--------->", formResult.data);
 					// @ts-ignore
-					$formData.set(formResult.data);
+					formData.set(formResult.data);
 				}
 			},
-			taintedMessage: null
+			applyAction: false, // Add this line to prevent page reload
+			resetForm: false,
+			invalidateAll: false // Optional: prevent form reset after submission
 		}
 	);
 

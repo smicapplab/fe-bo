@@ -47,7 +47,9 @@
 				toast.success("Your Personal Information has been successfully saved!")
 			}
 		},
-		taintedMessage: null
+		applyAction: false,  // Add this line to prevent page reload
+		resetForm: false,
+        invalidateAll: false    // Optional: prevent form reset after submission
 	});
 
 	const { form: formData, enhance, errors } = form;
