@@ -32,6 +32,7 @@ import {
 	FileStack,
 	Gavel,
 	LoaderPinwheel,
+	Lock,
 	Menu,
 	Pencil,
 	Save,
@@ -87,5 +88,6 @@ export const Icons = {
 	signature: Signature,
 	gavel: Gavel,
 	pencil: Pencil,
-	search: Search
+	search: Search,
+	lock: Lock
 };

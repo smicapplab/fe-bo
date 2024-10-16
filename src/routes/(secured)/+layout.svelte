@@ -102,7 +102,7 @@
 						<DropdownMenu.Label>Hi {profile.firstName}!</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						{#if !['PQL', 'FAIL'].includes(profile.status)}
-							<DropdownMenu.Item class="cursor-pointer" href="/profile/personal"
+							<DropdownMenu.Item class="cursor-pointer" href="/profile"
 								>Profile</DropdownMenu.Item
 							>
 						{/if}

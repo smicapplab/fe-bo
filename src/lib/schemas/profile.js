@@ -32,6 +32,19 @@ export const userFormSchema = z.object({
 	mobile
 });
 
+export const updatePassword = z.object({
+	password
+});
+
+export const updateProfileSchema = z.object({
+	id: z.string(),
+	firstName,
+	middleName,
+	lastName,
+	email,
+	mobile,
+});
+
 export const pqlFormSchema = z.object({
 	reasonStatus: z.array(z.string()).nullish(),
 	questions: z.array(z.object({

@@ -171,3 +171,33 @@ export const getMixedAbbreviationAndRandomInitial = (abbreviation) => {
 	}
 	return null;
 };
+
+export const  generatePassword = () => {
+	const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
+	const numbers = '0123456789';
+	const specialChars = '!@#$%^&*()_+-=[]{}|;:",.<>?';
+
+	const allChars = upperCase + lowerCase + numbers + specialChars;
+
+	// Function to pick a random character from a string
+	const getRandomChar = (/** @type {string | any[]} */ str) => str[Math.floor(Math.random() * str.length)];
+
+	// Ensure at least one of each required character type
+	let password = [
+		getRandomChar(upperCase),
+		getRandomChar(lowerCase),
+		getRandomChar(numbers),
+		getRandomChar(specialChars),
+	];
+
+	// Fill the rest of the password (length 8-50)
+	for (let i = password.length; i < 12; i++) {
+		password.push(getRandomChar(allChars));
+	}
+
+	// Shuffle the characters
+	password = password.sort(() => Math.random() - 0.5).join('');
+
+	return password;
+}
