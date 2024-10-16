@@ -15,6 +15,11 @@
 	export { className as class };
 	export let isLoading = false;
 	export let showPassword = false;
+
+	
+	/**
+	 * @type {string | null}
+	 */
 	let errorMsgLogin = null;
 
 	let data = $$props;

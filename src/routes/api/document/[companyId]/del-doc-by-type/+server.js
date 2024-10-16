@@ -1,10 +1,11 @@
+import { getSupabaseClient } from '$lib/supabase/server-supabase';
 import { keysToCamelCase, keysToSnakeCase } from '$lib/utils';
 import { json } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
-export async function POST({ request, locals, params }) {
+export async function POST({ request, params }) {
 	const { companyId } = params;
-	const { supabase, user } = locals;
+	const supabase = getSupabaseClient();
 	const { type, selectedFile } = await request.json();
 
 	let { data: document } = await supabase
@@ -16,7 +17,7 @@ export async function POST({ request, locals, params }) {
 
 	if( document ){
 		const data = keysToCamelCase(document);
-		const updatedImages = document.images.filter(image => image.url !== selectedFile.url);
+		const updatedImages = document.images.filter((/** @type {{ url: any; }} */ image) => image.url !== selectedFile.url);
 		
 		await supabase.from('documents').update(
 			{ ...keysToSnakeCase({...data, images: updatedImages}) }

@@ -1,10 +1,11 @@
+import { getSupabaseClient } from '$lib/supabase/server-supabase';
 import { keysToCamelCase } from '$lib/utils';
 import { json } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
-export async function POST({ request, locals, params }) {
+export async function POST({ request, params }) {
 	const { companyId } = params;
-	const { supabase, user } = locals;
+	const supabase = getSupabaseClient();
 	const { type } = await request.json();
 
 	let { data: document } = await supabase

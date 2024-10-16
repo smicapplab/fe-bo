@@ -1,10 +1,11 @@
 import { json } from '@sveltejs/kit';
 import { keysToCamelCase } from '$lib/utils';
+import { getSupabaseClient } from '$lib/supabase/server-supabase';
 
-export async function POST({ request, params, locals }) {
+export async function POST({ request }) {
     const body = await request.json();
     const { filter } = body;
-    const { supabase } = locals;
+    const supabase = getSupabaseClient();
 
     // Step 1: Fetch companies and all related profiles
     let query = supabase

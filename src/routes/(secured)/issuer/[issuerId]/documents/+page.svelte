@@ -9,6 +9,14 @@
 	import Aof from './(components)/(forms)/aof.svelte';
 	import Aop from './(components)/(forms)/aop.svelte';
 
+	/**
+	 * @typedef {'SOLE' | 'CORP' | 'PART' | 'OPC'} CompanyType
+	 */
+
+	/**
+	 * An object mapping company type codes to their full names.
+	 * @type {{ SOLE: string; CORP: string; PART: string; OPC: string }}
+	 */
 	const companyTypes = {
 		SOLE: 'Sole Proprietorship',
 		CORP: 'Corporation',
@@ -17,10 +25,13 @@
 	};
 
 	let { company } = $page.data;
+	/**
+	 * The current company type.
+	 * @type {CompanyType}
+	 */
 	$: companyType = company.companyType;
 	$: companyId = company.id;
-    $: companyCode = company.code
-
+	$: companyCode = company.code;
 </script>
 
 <div class="space-y-6">
@@ -28,24 +39,24 @@
 	<Separator />
 
 	{#if companyType === 'CORP'}
-		<Gis {companyId} {companyCode}/>
-		<Sec {companyId} {companyCode}/>
-		<Sec docType="SECAMEND" {companyId} {companyCode}/>
-		<Mp {companyId} {companyCode}/>
-		<Aoi {companyId} {companyCode}/>
+		<Gis {companyId} {companyCode} />
+		<Sec {companyId} {companyCode} />
+		<Sec docType="SECAMEND" {companyId} {companyCode} />
+		<Mp {companyId} {companyCode} />
+		<Aoi {companyId} {companyCode} />
 	{:else if companyType === 'SOLE'}
-		<Dti {companyId} {companyCode}/>
-		<Mp {companyId} {companyCode}/>
+		<Dti {companyId} {companyCode} />
+		<Mp {companyId} {companyCode} />
 	{:else if companyType === 'OPC'}
-		<Aof {companyId} {companyCode}/>
-		<Sec {companyId} {companyCode}/>
-		<Sec docType="SECAMEND" {companyId} {companyCode}/>
-		<Mp {companyId} {companyCode}/>
-		<Aoi {companyId} {companyCode}/>
+		<Aof {companyId} {companyCode} />
+		<Sec {companyId} {companyCode} />
+		<Sec docType="SECAMEND" {companyId} {companyCode} />
+		<Mp {companyId} {companyCode} />
+		<Aoi {companyId} {companyCode} />
 	{:else if companyType === 'PART'}
-		<Sec {companyId} {companyCode}/>
-		<Sec docType="SECAMEND" {companyId} {companyCode}/>
-		<Mp {companyId} {companyCode}/>
-		<Aop {companyId} {companyCode}/>
+		<Sec {companyId} {companyCode} />
+		<Sec docType="SECAMEND" {companyId} {companyCode} />
+		<Mp {companyId} {companyCode} />
+		<Aop {companyId} {companyCode} />
 	{/if}
 </div>

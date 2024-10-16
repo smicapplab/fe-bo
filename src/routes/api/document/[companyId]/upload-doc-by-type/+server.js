@@ -4,13 +4,14 @@ import { json } from '@sveltejs/kit';
 import { AWS_ISUER_BUCKET } from '$env/static/private';
 import { PUBLIC_ISSUER_DOC_URL } from '$env/static/public';
 import { v4 as uuidv4 } from 'uuid';
+import { getSupabaseClient } from '$lib/supabase/server-supabase';
 
 /** @type {import('./$types').RequestHandler} */
-export async function POST({ request, locals, params }) {
+export async function POST({ request, params }) {
 	const { companyId } = params;
 
 	const { type, name, data, companyCode } = await request.json();
-	const { supabase } = locals;
+	const supabase = getSupabaseClient();
 
 	let { data: document } = await supabase
 		.from('documents')
@@ -65,20 +66,22 @@ export async function POST({ request, locals, params }) {
 					}
 				]
 			};
-			const { error, data: updatedDocument } = await supabase
+			const { error: docError, data: updatedDocument } = await supabase
 				.from('documents')
 				.insert(keysToSnakeCase(document))
 				.select()
 				.single();
-			if (error) {
-				console.error(error);
+
+			if (docError) {
+				console.error(docError);
 			}
+
 			return json(keysToCamelCase(updatedDocument));
 		}
 	} catch (error) {
 		return json({
 			success: false,
-			error: error.message || error.details || error.m || error.toString()
+			error
 		});
 	}
 }

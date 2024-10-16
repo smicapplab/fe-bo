@@ -16,6 +16,7 @@
 	import AdvancedCalendar from '$lib/components/ui/calendar/advanced-calendar.svelte';
 	import { Icons } from '$lib/components/ui/icons';
 	import { cn } from '$lib/utils.js';
+	import { toast } from 'svelte-sonner';
 
 	export let data;
 	let isLoading = false;
@@ -42,19 +43,8 @@
 			isLoading = false;
 			const { result: formResult } = result;
 			if (formResult.type === 'success') {
-				// toast.success("Your Personal Information has been successfully saved!")
-				// if (isBrowser()) {
-				// 	// Any initialization code can go here
-				// 	const response = await fetch(`/api/registration/check-status`, {
-				// 		method: 'POST',
-				// 		headers: { 'Content-Type': 'application/json' }
-				// 	});
-				// 	if (response.ok) {
-				// 		const data = await response.json();
-				// 		registrationStore.set(data);
-				// 		$formData.update(formResult.data);
-				// 	}
-				// }
+				formData.update(formResult.data);
+				toast.success("Your Personal Information has been successfully saved!")
 			}
 		},
 		taintedMessage: null
@@ -445,6 +435,15 @@
 					</Form.Control>
 				</Form.Field>
 			</div>
+		</div>
+		<div class="py-5">
+			<Form.Button disabled={isLoading} class="min-w-40 bg-primary">
+				{#if isLoading}
+					<Icons.loaderPinwheel class="animate-spin" />
+				{:else}
+					Save <Icons.save class="ml-2" />
+				{/if}
+			</Form.Button>
 		</div>
 	</form>
 </div>

@@ -23,7 +23,7 @@
 			href: `/issuer/${issuerId}/documents`
 		}
 	];
-
+		
 	onMount(async () => {
 		// Any initialization code can go here
 		try {

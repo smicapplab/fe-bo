@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ArrowRight from 'lucide-svelte/icons/arrow-right';
 import Check from 'lucide-svelte/icons/check';
 import ChevronLeft from 'lucide-svelte/icons/chevron-left';

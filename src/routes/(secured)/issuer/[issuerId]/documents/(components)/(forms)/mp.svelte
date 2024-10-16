@@ -1,6 +1,6 @@
 <script>
 	// @ts-nocheck
-	
+
 	import { Button } from '$lib/components/ui/button';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -113,7 +113,7 @@
 								type: 'MP',
 								name,
 								data: reader.result,
-								companyCode,
+								companyCode
 							})
 						});
 
@@ -215,64 +215,66 @@
 			</div>
 		</div>
 
-		<form
-			method="POST"
-			use:enhance
-			class="grid grid-cols-1 space-y-8 border border-gray-200 p-4 lg:grid-cols-3"
-			id="profile-form"
-			action="?/saveDocumentMP"
-		>
-			<div class="lg:col-span-2">
-				<Form.Field {form} name="expirationDate" class="mb-6 flex flex-col">
-					<Form.Control let:attrs>
-						<Form.Label>Expiration Date</Form.Label>
-						<Popover.Root>
-							<Popover.Trigger
-								{...attrs}
-								class={cn(
-									buttonVariants({ variant: 'outline' }),
-									'w-full max-w-72 justify-start pl-4 text-left font-normal',
-									!$formData.expirationDate && 'text-muted-foreground'
-								)}
-							>
-								{$formData.expirationDate
-									? df.format(parseDate($formData.expirationDate).toDate(getLocalTimeZone()))
-									: 'Pick a date'}
-								<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
-							</Popover.Trigger>
-							<Popover.Content class="w-auto p-0" side="top">
-								<AdvancedCalendar
-									value={$formData.expirationDate ? parseDate($formData.expirationDate) : null}
-									minValue={currentDate.subtract({ years: 1 })}
-									maxValue={currentDate.add({ years: 10 })}
-									onValueChange={(v) => {
-										$formData.expirationDate = v ? v.toString() : '';
-									}}
-								/>
-							</Popover.Content>
-						</Popover.Root>
-						<Form.FieldErrors />
-					</Form.Control>
-				</Form.Field>
+		{#if $formData.images && $formData.images.length > 0}
+			<form
+				method="POST"
+				use:enhance
+				class="grid grid-cols-1 space-y-8 border border-gray-200 p-4 lg:grid-cols-3"
+				id="profile-form"
+				action="?/saveDocumentMP"
+			>
+				<div class="lg:col-span-2">
+					<Form.Field {form} name="expirationDate" class="mb-6 flex flex-col">
+						<Form.Control let:attrs>
+							<Form.Label>Expiration Date</Form.Label>
+							<Popover.Root>
+								<Popover.Trigger
+									{...attrs}
+									class={cn(
+										buttonVariants({ variant: 'outline' }),
+										'w-full max-w-72 justify-start pl-4 text-left font-normal',
+										!$formData.expirationDate && 'text-muted-foreground'
+									)}
+								>
+									{$formData.expirationDate
+										? df.format(parseDate($formData.expirationDate).toDate(getLocalTimeZone()))
+										: 'Pick a date'}
+									<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
+								</Popover.Trigger>
+								<Popover.Content class="w-auto p-0" side="top">
+									<AdvancedCalendar
+										value={$formData.expirationDate ? parseDate($formData.expirationDate) : null}
+										minValue={currentDate.subtract({ years: 1 })}
+										maxValue={currentDate.add({ years: 10 })}
+										onValueChange={(v) => {
+											$formData.expirationDate = v ? v.toString() : '';
+										}}
+									/>
+								</Popover.Content>
+							</Popover.Root>
+							<Form.FieldErrors />
+						</Form.Control>
+					</Form.Field>
 
-				<Form.Field {form} name="number">
-					<Form.Control let:attrs>
-						<Form.Label>Document Number</Form.Label>
-						<Input bind:value={$formData.number} class="max-w-72" />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-			<div class="flex justify-end">
-				<Form.Button disabled={!$formData.images || $formData.images.length === 0} class="min-w-40">
-					{#if isLoading}
-						<Icons.loaderPinwheel class="animate-spin" />
-					{:else}
-						Save <Icons.save class="ml-2" />
-					{/if}
-				</Form.Button>
-			</div>
-		</form>
+					<Form.Field {form} name="number">
+						<Form.Control let:attrs>
+							<Form.Label>Document Number</Form.Label>
+							<Input bind:value={$formData.number} class="max-w-72" />
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+				</div>
+				<div class="flex justify-end">
+					<Form.Button class="min-w-40">
+						{#if isLoading}
+							<Icons.loaderPinwheel class="animate-spin" />
+						{:else}
+							Save <Icons.save class="ml-2" />
+						{/if}
+					</Form.Button>
+				</div>
+			</form>
+		{/if}
 	{/if}
 </div>
 

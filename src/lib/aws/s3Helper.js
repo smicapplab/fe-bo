@@ -17,13 +17,20 @@ const s3Client = new S3Client({
 	...credentials
 });
 
-// Helper function to convert base64 to buffer
+
+/**
+ * Description placeholder
+ *
+ * @param {*} base64String
+ * @returns {*}
+ */
 const decodeBase64 = (base64String) => {
 	const base64Data = base64String.replace(/^data:([A-Za-z-+/]+);base64,/, '');
 	return Buffer.from(base64Data, 'base64');
 };
 
-// Upload function
+
+// @ts-ignore
 export const uploadToS3 = async ({ buffer, fileName, bucket, fileType = "pdf" }) => {
 	try {
 		const checkUpload = new Upload({
@@ -46,12 +53,13 @@ export const uploadToS3 = async ({ buffer, fileName, bucket, fileType = "pdf" })
 	}
 };
 
-// Example usage
+// @ts-ignore
 export const uploadBase64File = async ({ base64String, fileName, bucket, fileType }) => {
 	const buffer = decodeBase64(base64String);
 	await uploadToS3({ buffer, fileName, bucket, fileType });
 };
 
+// @ts-ignore
 export const resolveFileType = ({ name, data }) => {
 	let fileType = "";
 	if (name.toLowerCase().endsWith('.pdf')) {

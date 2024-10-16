@@ -1,5 +1,4 @@
 <script>
-	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
 	import { Input } from '$lib/components/ui/input';
@@ -20,6 +19,7 @@
 	import { fetchBarangaysByCities, fetchCitiesByProvince, fetchProvinces } from '$lib/data/geo.js';
 	import { onMount } from 'svelte';
 	import { Icons } from '$lib/components/ui/icons/index.js';
+	import { toast } from 'svelte-sonner';
 
 	export let data;
 	let isLoading = false;
@@ -53,18 +53,8 @@
 			const { result: formResult } = result;
 			if (formResult.type === 'success') {
 				if (isBrowser()) {
-					// toast.success("Company Information has been successfully saved!")
-					// // Any initialization code can go here
-					// const response = await fetch(`/api/registration/check-status`, {
-					// 	method: 'POST',
-					// 	headers: { 'Content-Type': 'application/json' }
-					// });
-					// if (response.ok) {
-					// 	const data = await response.json();
-					// 	registrationStore.set(data);
-					// 	companyStore.set(formResult.data.form.data);
-					// 	$formData.set(formResult.data);
-					// }
+					toast.success("Company Information has been successfully saved!")
+					formData.set(formResult.data);
 				}
 			}
 		},
@@ -135,6 +125,7 @@
 </script>
 
 <div class="space-y-6">
+	<h2 class="font-semibold">Company Information</h2>
 	<form
 		method="POST"
 		use:enhance
@@ -182,7 +173,6 @@
 					rows="5"
 					bind:value={$formData.companyDescription}
 				/>
-				<Form.Description>Brief description about your company or business.</Form.Description>
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>

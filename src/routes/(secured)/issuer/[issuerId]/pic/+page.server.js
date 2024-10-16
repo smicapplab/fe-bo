@@ -1,8 +1,9 @@
 import { fetchLovsFromApi } from '$lib/data/lov';
 import { profileFormSchema } from '$lib/schemas/profile';
-import { keysToCamelCase } from '$lib/utils';
-import { superValidate } from 'sveltekit-superforms';
+import { keysToCamelCase, keysToSnakeCase } from '$lib/utils';
+import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { getSupabaseClient } from '$lib/supabase/server-supabase';
 
 const fetchLovsData = async () => {
     try {
@@ -22,8 +23,8 @@ const fetchLovsData = async () => {
 };
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ locals, params }) {
-    const { supabase } = locals;
+export async function load({ params }) {
+    const supabase = getSupabaseClient();
     const issuerId = params.issuerId;
 
     const { data: profileData } = await supabase
@@ -39,3 +40,44 @@ export async function load({ locals, params }) {
     // @ts-ignore
     return { form, ...lov };
 }
+
+export const actions = {
+    savePersonal: async ({ request }) => {
+        const formData = await request.formData();
+        const form = await superValidate(formData, zod(profileFormSchema));
+
+        if (!form.valid) {
+            return fail(400, { form });
+        }
+
+        const profile = {
+            ...form.data,
+            dob: new Date(form.data.dob).toISOString(),
+            idExpiry: form.data.idExpiry ? new Date(form.data.idExpiry).toISOString() : null,
+            updated_at: new Date().toISOString(),
+            full_name: `${form.data.firstName} ${form.data.lastName}`
+        };
+
+        const supabase = getSupabaseClient();
+        try {
+            const { error: supabaseError } = await supabase
+                .from('profiles')
+                .update(keysToSnakeCase(profile))
+                .eq('id', profile?.id)
+
+            if (supabaseError) {
+                console.error(supabaseError);
+            }
+
+            return {
+                form
+            };
+        } catch (e) {
+            console.error(e);
+            return {
+                form,
+                success: false
+            };
+        }
+    }
+};
